@@ -16,7 +16,7 @@ import 'package:serverpod_client/serverpod_client.dart' as _i2;
 import 'dart:async' as _i3;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as _i4;
-import 'package:my_project_client/src/protocol/greetings/greeting.dart' as _i5;
+import 'package:my_project_client/src/protocol/todos/todo.dart' as _i5;
 import 'protocol.dart' as _i6;
 
 /// By extending [EmailIdpBaseEndpoint], the email identity provider endpoints
@@ -240,22 +240,46 @@ class EndpointJwtRefresh extends _i4.EndpointRefreshJwtTokens {
   );
 }
 
-/// This is an example endpoint that returns a greeting message through
-/// its [hello] method.
 /// {@category Endpoint}
-class EndpointGreeting extends _i2.EndpointRef {
-  EndpointGreeting(_i2.EndpointCaller caller) : super(caller);
+class EndpointTodos extends _i2.EndpointRef {
+  EndpointTodos(_i2.EndpointCaller caller) : super(caller);
 
   @override
-  String get name => 'greeting';
+  String get name => 'todos';
 
-  /// Returns a personalized greeting message: "Hello {name}".
-  _i3.Future<_i5.Greeting> hello(String name) =>
-      caller.callServerEndpoint<_i5.Greeting>(
-        'greeting',
-        'hello',
-        {'name': name},
+  _i3.Future<List<_i5.Todo>> getAllTodos() =>
+      caller.callServerEndpoint<List<_i5.Todo>>(
+        'todos',
+        'getAllTodos',
+        {},
       );
+
+  _i3.Future<_i5.Todo?> getTodoById(int id) =>
+      caller.callServerEndpoint<_i5.Todo?>(
+        'todos',
+        'getTodoById',
+        {'id': id},
+      );
+
+  _i3.Future<_i5.Todo> createTodo(_i5.Todo todo) =>
+      caller.callServerEndpoint<_i5.Todo>(
+        'todos',
+        'createTodo',
+        {'todo': todo},
+      );
+
+  _i3.Future<_i5.Todo> updateTodo(_i5.Todo todo) =>
+      caller.callServerEndpoint<_i5.Todo>(
+        'todos',
+        'updateTodo',
+        {'todo': todo},
+      );
+
+  _i3.Future<void> deleteTodo(int id) => caller.callServerEndpoint<void>(
+    'todos',
+    'deleteTodo',
+    {'id': id},
+  );
 }
 
 class Modules {
@@ -300,7 +324,7 @@ class Client extends _i2.ServerpodClientShared {
        ) {
     emailIdp = EndpointEmailIdp(this);
     jwtRefresh = EndpointJwtRefresh(this);
-    greeting = EndpointGreeting(this);
+    todos = EndpointTodos(this);
     modules = Modules(this);
   }
 
@@ -308,7 +332,7 @@ class Client extends _i2.ServerpodClientShared {
 
   late final EndpointJwtRefresh jwtRefresh;
 
-  late final EndpointGreeting greeting;
+  late final EndpointTodos todos;
 
   late final Modules modules;
 
@@ -316,7 +340,7 @@ class Client extends _i2.ServerpodClientShared {
   Map<String, _i2.EndpointRef> get endpointRefLookup => {
     'emailIdp': emailIdp,
     'jwtRefresh': jwtRefresh,
-    'greeting': greeting,
+    'todos': todos,
   };
 
   @override
