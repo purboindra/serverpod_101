@@ -1,0 +1,5 @@
+class: Todo
+table: todo
+fields:
+  text: String
+  completed: bool

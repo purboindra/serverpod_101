@@ -9,5 +9,9 @@ emailIdp:
   - hasAccount:
 jwtRefresh:
   - refreshAccessToken:
-greeting:
-  - hello:
+todos:
+  - getAllTodos:
+  - getTodoById:
+  - createTodo:
+  - updateTodo:
+  - deleteTodo:
